@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紅茶メニュー切り替えのお知らせ｜Island Vintage Coffee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --espresso:#4a2c20;
+    --coffee:#6f4531;
+    --caramel:#c8894a;
+    --caramel-light:#e8b97a;
+    --cream:#faf3e7;
+    --cream-2:#f3e6cf;
+    --paper:#fffdf9;
+    --ink:#3a2a20;
+    --alert:#b5432f;
+    --alert-bg:#fbe9e4;
+    --ok-bg:#eef4e6;
+    --ok:#4b6b3a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Noto Sans JP',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.8;
+    letter-spacing:0.02em;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 60px;}
+
+  /* Header */
+  header{
+    background:linear-gradient(135deg,var(--espresso),var(--coffee));
+    color:var(--cream);
+    padding:30px 20px 26px;
+  }
+  h1{
+    font-size:clamp(22px,5vw,30px);
+    font-weight:900;
+    margin:0;
+  }
+
+  /* Big two-block summary: 何が変わる / どうする */
+  .top-blocks{
+    margin-top:22px;
+    display:grid;
+    gap:16px;
+  }
+  .top-block{
+    background:var(--paper);
+    border-radius:16px;
+    padding:20px 22px;
+    box-shadow:0 6px 20px rgba(74,44,32,0.12);
+    border-left:6px solid var(--caramel);
+  }
+  .top-block.action{border-left-color:var(--ok);}
+  .top-block .tag{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--coffee);
+    letter-spacing:0.05em;
+    margin-bottom:6px;
+  }
+  .top-block .tag.action{color:var(--ok);}
+  .top-block .big{
+    font-size:17px;
+    font-weight:900;
+    color:var(--espresso);
+  }
+
+  /* Section */
+  section{margin-top:36px;}
+  h2{
+    font-size:18px;
+    font-weight:900;
+    color:var(--espresso);
+    margin:0 0 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  h2 .dot{
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--caramel);
+    flex:0 0 auto;
+  }
+  p{margin:0 0 10px;font-size:14.5px;}
+
+  .card{
+    background:var(--paper);
+    border-radius:14px;
+    padding:20px 22px;
+    box-shadow:0 3px 14px rgba(74,44,32,0.08);
+  }
+
+  .lineup-img{
+    width:100%;
+    border-radius:12px;
+    display:block;
+    margin-top:12px;
+    box-shadow:0 3px 14px rgba(74,44,32,0.1);
+  }
+
+  /* Menu table */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--paper);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 3px 14px rgba(74,44,32,0.08);
+  }
+  th,td{
+    padding:12px 14px;
+    text-align:left;
+    font-size:14px;
+    border-bottom:1px solid var(--cream-2);
+  }
+  th{
+    background:var(--espresso);
+    color:var(--cream);
+    font-weight:700;
+    font-size:13px;
+  }
+  tr:last-child td{border-bottom:none;}
+  .price{font-weight:900;color:var(--coffee);}
+  .badge{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    padding:3px 10px;
+    border-radius:100px;
+    background:var(--caramel-light);
+    color:var(--espresso);
+  }
+  .badge.ice{background:#cfe4ef;color:#1f5372;}
+
+  .flavor-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:2px;
+  }
+  .flavor-pill{
+    background:var(--cream);
+    border:1.5px solid var(--caramel-light);
+    border-radius:100px;
+    padding:5px 13px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--espresso);
+  }
+
+  /* Steps */
+  .steps{
+    counter-reset:step;
+    padding:0;
+    margin:0;
+    list-style:none;
+  }
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:13px 16px 13px 52px;
+    background:var(--cream);
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:14px;
+  }
+  .steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:14px;top:50%;
+    transform:translateY(-50%);
+    width:24px;height:24px;
+    background:var(--caramel);
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:12.5px;
+  }
+
+  .callout{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:var(--alert-bg);
+    border:1.5px solid #e3b3a8;
+    border-radius:12px;
+    padding:14px 16px;
+    margin-top:14px;
+  }
+  .callout .icon{font-size:18px;line-height:1;}
+  .callout strong{color:var(--alert);}
+  .callout p{margin:0;font-size:13.5px;}
+
+  .note-bar{
+    display:inline-flex;
+    gap:8px;
+    align-items:center;
+    background:var(--ok-bg);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-top:12px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--ok);
+  }
+
+  footer{
+    margin-top:44px;
+    padding:20px 20px;
+    text-align:center;
+    font-size:12px;
+    color:var(--coffee);
+    opacity:0.75;
+  }
+
+  @media (max-width:520px){
+    .card{padding:16px 16px;}
+    header{padding:26px 16px 22px;}
+    .top-block{padding:16px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="padding:0;">
+    <h1>紅茶メニュー切り替えのお知らせ</h1>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="top-blocks">
+    <div class="top-block">
+      <div class="tag">📌 何が変わる？</div>
+      <div class="big">紅茶が「Numi Organic Tea」に変更（価格：M ¥650／L ¥720）</div>
+      <p style="margin:8px 0 0;font-size:13px;color:var(--coffee);">※切り替えは現在の紅茶の在庫がなくなり次第となります</p>
+    </div>
+    <div class="top-block action">
+      <div class="tag action">✅ 何をする？</div>
+      <div class="big">ホットはレジで4種類のフレーバーから選んでもらう（提供方法は今まで通り）／アイスは新レシピで仕込み／レジの説明資料を読んで内容を把握（下記参照）</div>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="dot"></span>メニュー・価格</h2>
+    <table>
+      <thead>
+        <tr><th>提供形態</th><th>フレーバー</th><th>価格</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge">HOT</span></td>
+          <td>4種類からお客様が選択<br><span style="font-size:12px;color:var(--coffee);">Aged Earl Grey（アールグレイ）／Jasmine Green（ジャスミングリーン）／Moroccan Mint（モロカンミント）／Rooibos Chai（ルイボスチャイ）</span></td>
+          <td class="price">M ¥650／L ¥720</td>
+        </tr>
+        <tr>
+          <td><span class="badge ice">ICE</span></td>
+          <td>Aged Earl Grey（アールグレイ）のみ</td>
+          <td class="price">M ¥650／L ¥720</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>ホットの提供方法</h2>
+    <div class="card">
+      <p>これまでと同じ方法です。カップにティーバッグを入れ、お湯を注いでください。</p>
+      <div class="note-bar">✓ オペレーション変更なし</div>
+
+      <p style="margin-top:18px;font-weight:700;color:var(--espresso);">抽出時間の目安</p>
+      <table style="margin-top:6px;">
+        <thead>
+          <tr><th>フレーバー</th><th>抽出時間目安</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Aged Earl Grey／Moroccan Mint／Rooibos Chai</td>
+            <td class="price">5分程度</td>
+          </tr>
+          <tr>
+            <td>Jasmine Green</td>
+            <td class="price">3分程度</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout" style="background:var(--ok-bg);border-color:#cddcc0;">
+        <div class="icon">💬</div>
+        <div>
+          <strong style="color:var(--ok);">お渡し時の一言案内：</strong>
+          <p>ティーバッグをお湯に入れてすぐにお渡しする場合は、下記のように一言お伝えください。</p>
+          <p style="margin-top:6px;">「3分ほど抽出してからお召し上がりください」（Jasmine Green）<br>「5分ほど抽出してからお召し上がりください」（Aged Earl Grey／Moroccan Mint／Rooibos Chai）</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>アイスの仕込みレシピ</h2>
+    <div class="card">
+      <ol class="steps">
+        <li>ピッチャーに茶葉を12袋入れる</li>
+        <li>熱湯1リットルを注ぐ</li>
+        <li>3分間蒸らす</li>
+        <li>2.1リットル用ピッチャーの上まで氷を入れておく</li>
+        <li>3分蒸らしたら茶葉を取り出す</li>
+        <li>氷を入れたピッチャーに⑤の茶液を入れて急冷する</li>
+        <li>1分程度しっかり混ぜながら冷やす</li>
+      </ol>
+      <div class="callout">
+        <div class="icon">⚠️</div>
+        <div>
+          <strong>注意：</strong>
+          <p>しっかり混ぜて冷やさないと、アイスティーが濁る原因になります。</p>
+        </div>
+      </div>
+      <div class="note-bar" style="background:var(--cream-2);color:var(--espresso);">🕒 賞味期限：仕込みから+1日</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>レジの説明資料について</h2>
+    <div class="card">
+      <p>レジに、Numiティーの説明と各フレーバーの特徴を記載した紙（日本語／英語）を置いておきます。</p>
+      <div class="callout" style="background:var(--alert-bg);">
+        <div class="icon">📋</div>
+        <div>
+          <strong>スタッフの対応：</strong>
+          <p>内容をよく読んで把握しておいてください。お客様から説明を求められた際は、この紙を提示しながらご案内すると、スムーズに説明できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+
+<footer>
+  Island Vintage Coffee Japan　店舗運営部
+</footer>
+
+</body>
+</html>
